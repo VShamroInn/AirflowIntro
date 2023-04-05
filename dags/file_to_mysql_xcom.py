@@ -49,6 +49,7 @@ def upload(**kwargs):
         at VARCHAR(32), 
         replyContent VARCHAR(2048), 
         repliedAt VARCHAR(128))"""
+    mysqlserver.run("CREATE DATABASE IF NOT EXISTS first")
     mysqlserver.run(create_table_query)
     mysqlserver.insert_rows(table="first.info", rows=data.values.tolist())
 
