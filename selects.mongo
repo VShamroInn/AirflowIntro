@@ -1,0 +1,22 @@
+db.info.find().sort({thumbsUpCount: -1}).limit(5)                                 #top 5 famous comments
+
+db.info.find({$expr:{$lt:[{$strLenCP:"$content"},5]}})                            #All entries where the length of the “content” field is less than 5 characters
+
+db.info.aggregate([
+  {
+    $addFields: {
+      timestamp: {
+        $dateFromString: {
+          dateString: {$substr:["$at",0,{$subtract:[{$strLenCP:"$at"},9]}]},
+          format: "%Y-%m-%d"
+        }
+      }
+    }
+  },
+   {
+    $group: {
+      _id: "$timestamp",
+      avgscore: { $avg: "$score" }
+    }
+  }
+])                                                                                #Average score per day
